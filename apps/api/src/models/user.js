@@ -35,7 +35,7 @@ const userSchema = new Schema(
     otpExpires: Date,
     role: {
       type: String,
-      enum: ["customer", "vendor"],
+      enum: ["customer", "vendor", "admin"],
       default: "customer",
     },
   },
