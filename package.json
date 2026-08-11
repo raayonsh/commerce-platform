@@ -1,6 +1,13 @@
 {
   "name": "commerce-platform",
   "private": true,
+  "homepage": "https://github.com/codayon/commerce-platform#readme",
+  "license": "Unlicense",
+  "author": {
+    "name": "Reshad Ahammed Ayon",
+    "email": "codayon@proton.me"
+  },
+  "repository": "github:codayon/commerce-platform",
   "workspaces": [
     "apps/*"
   ],
@@ -12,8 +19,11 @@
     "lint:fix": "oxlint --fix"
   },
   "devDependencies": {
-    "oxfmt": "^0.62.0",
-    "oxlint": "^1.77.0"
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0"
+  },
+  "engines": {
+    "node": ">=21.7.0"
   },
   "allowScripts": {
     "@scarf/scarf": false

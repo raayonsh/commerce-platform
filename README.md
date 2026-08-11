@@ -9,7 +9,7 @@ Express + MongoDB API and a React (Vite) storefront, organized as an npm-workspa
 
 ## Requirements
 
-- Node.js 20.12.0+
+- Node.js >=21.7.0
 - A running MongoDB instance
 
 ## Setup
@@ -50,4 +50,6 @@ Order (auth) /order/    POST /create-order
 Payment     /payment/   POST /webhook   (HMAC-SHA256 via x-payment-signature)
 ```
 
-License: Unlicense (see LICENSE.txt).
+## License
+
+The Unlicense (see [LICENSE.txt](./LICENSE.txt)).
