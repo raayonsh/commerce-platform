@@ -1,49 +1,12 @@
-import { loadEnvFile } from "node:process";
-loadEnvFile();
-
 import express from "express";
-import session from "express-session";
-import database from "./config/database.js";
-import rootRouter from "./routes/index.js";
-import { errorHandler } from "./middlewares/error.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret) {
-  throw new Error("SESSION_SECRET is not defined");
-}
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
-app.use(
-  session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false },
-  }),
-);
-
-app.use(
-  express.json({
-    verify: (req, _res, buf) => {
-      if (buf && buf.length) {
-        req.rawBody = buf.toString("utf8");
-      }
-    },
-  }),
-);
-
-app.use("/", rootRouter);
-
-app.use(errorHandler);
-
-try {
-  await database();
-  app.listen(port, () => {
-    console.log(`App listening at ${port}`);
-  });
-} catch (err) {
-  console.error("Failed to start server:", err);
-  process.exit(1);
-}
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
