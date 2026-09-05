@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { connect } from "mongoose";
 
 async function database() {
   try {
@@ -6,7 +6,7 @@ async function database() {
     if (!mongodbUri) {
       throw new Error("MONGODB_URI is not defined");
     }
-    await mongoose.connect(mongodbUri);
+    await connect(mongodbUri);
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error(err);
