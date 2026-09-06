@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 import { isEmail, isStrongPassword } from "validator";
 
 const userSchema = new Schema(
