@@ -1,6 +1,7 @@
-import { loadEnvFile } from "node:process";
 import express from "express";
-import database from "./config/database.js";
+import { loadEnvFile } from "node:process";
+
+import { connectDB, disconnectDB } from "./config/database.js";
 
 loadEnvFile();
 
@@ -12,11 +13,24 @@ app.get("/", (req, res) => {
 });
 
 try {
-  await database();
-  app.listen(port, () => {
-    console.log(`App listening at ${port}`);
+  await connectDB();
+
+  const server = app.listen(port, () => {
+    console.log(`App listening at http://localhost:${port}`);
   });
+
+  const handleShutdown = async () => {
+    console.log("\nShutting down gracefully...");
+
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(0);
+    });
+  };
+
+  process.on("SIGINT", handleShutdown);
+  process.on("SIGTERM", handleShutdown);
 } catch (err) {
-  console.error("Failed to start server:", err);
+  console.error("Failed to start server:", err.message);
   process.exit(1);
 }
