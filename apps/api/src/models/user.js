@@ -1,5 +1,5 @@
-import { model, Schema } from "mongoose";
-import { isEmail, isStrongPassword } from "validator";
+import { model, models, Schema } from "mongoose";
+import { isEmail } from "validator";
 
 const userSchema = new Schema(
   {
@@ -45,4 +45,4 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-export const User = model("User", userSchema);
+export const User = models.User || model("User", userSchema);
