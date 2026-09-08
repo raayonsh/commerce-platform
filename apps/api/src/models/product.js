@@ -30,8 +30,6 @@ const productSchema = new Schema(
       type: Number,
       required: [true, "Price is required"],
       min: [0, "Price cannot be negative"],
-      get: (v) => (v / 100).toFixed(2),
-      set: (v) => Math.round(v * 100),
     },
     category: {
       type: Schema.Types.ObjectId,
@@ -50,8 +48,6 @@ const productSchema = new Schema(
   },
   {
     timestamps: true,
-    toJSON: { getters: true },
-    toObject: { getters: true },
   },
 );
 
