@@ -1,5 +1,4 @@
 import { model, models, Schema } from "mongoose";
-import { isEmail } from "validator";
 
 const userSchema = new Schema(
   {
@@ -14,7 +13,7 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      validate: [isEmail, "Please enter a valid email address"],
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email address"],
     },
     password: {
       type: String,
