@@ -1,17 +1,11 @@
-import { hash } from "bcryptjs";
-import { Schema, model } from "mongoose";
-import validator from "validator";
+import { model, models, Schema } from "mongoose";
 
 const userSchema = new Schema(
   {
-    username: {
+    role: {
       type: String,
-      required: [true, "Username is required"],
-      lowercase: true,
-      unique: true,
-      trim: true,
-      minLength: [3, "Username must be at least 3 characters long"],
-      maxLength: [20, "Username cannot exceed 20 characters"],
+      enum: ["customer", "vendor", "admin"],
+      default: "customer",
     },
     email: {
       type: String,
@@ -19,34 +13,35 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      validate: [validator.isEmail, "That doesn't look like a valid email"],
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Please enter a valid email address"],
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
       select: false,
-      validate: [validator.isStrongPassword, "Password must be strong"],
+    },
+    displayName: {
+      type: String,
+      trim: true,
+      maxLength: [50, "Display name cannot exceed 50 characters"],
+      default: null,
     },
     isVerified: {
       type: Boolean,
       default: false,
     },
-    otp: String,
-    otpExpires: Date,
-    role: {
-      type: String,
-      enum: ["customer", "vendor"],
-      default: "customer",
+    authOtp: {
+      code: {
+        type: String,
+        select: false,
+      },
+      expiresAt: Date,
+      attempts: {
+        type: Number,
+        default: 0,
+      },
     },
   },
   { timestamps: true },
 );
 
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  this.password = await hash(this.password, 12);
-});
-
-const User = model("User", userSchema);
-
-export default User;
+export const User = models.User || model("User", userSchema);

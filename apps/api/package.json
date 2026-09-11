@@ -1,19 +1,17 @@
 {
   "name": "api",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "dev": "node --watch src/index.js",
-    "seed": "node scripts/seed.js"
+    "dev": "node --watch src/index.js"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "mongoose": "^9.9.1",
-    "nodemailer": "^9.0.5",
-    "validator": "^13.15.35"
+    "mongoose": "^9.9.4"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
   }
 }

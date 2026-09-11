@@ -1,49 +1,36 @@
-import { loadEnvFile } from "node:process";
-loadEnvFile();
-
 import express from "express";
-import session from "express-session";
-import database from "./config/database.js";
-import rootRouter from "./routes/index.js";
-import { errorHandler } from "./middlewares/error.js";
+import { loadEnvFile } from "node:process";
+
+import { connectDB, disconnectDB } from "./config/database.js";
+
+loadEnvFile();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-const sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret) {
-  throw new Error("SESSION_SECRET is not defined");
-}
-
-app.use(
-  session({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false },
-  }),
-);
-
-app.use(
-  express.json({
-    verify: (req, _res, buf) => {
-      if (buf && buf.length) {
-        req.rawBody = buf.toString("utf8");
-      }
-    },
-  }),
-);
-
-app.use("/", rootRouter);
-
-app.use(errorHandler);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 try {
-  await database();
-  app.listen(port, () => {
-    console.log(`App listening at ${port}`);
+  await connectDB();
+
+  const server = app.listen(port, () => {
+    console.log(`App listening at http://localhost:${port}`);
   });
+
+  const handleShutdown = async () => {
+    console.log("\nShutting down gracefully...");
+
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(0);
+    });
+  };
+
+  process.on("SIGINT", handleShutdown);
+  process.on("SIGTERM", handleShutdown);
 } catch (err) {
-  console.error("Failed to start server:", err);
+  console.error("Failed to start server:", err.message);
   process.exit(1);
 }

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { model, models, Schema } from "mongoose";
 
 const categorySchema = new Schema(
   {
@@ -8,17 +8,19 @@ const categorySchema = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      maxLength: [32, "Category name is too long"],
+      minLength: [1, "Category name cannot be empty"],
+      maxLength: [32, "Category name cannot exceed 32 characters"],
     },
     description: {
       type: String,
       trim: true,
-      required: [true, "Category description is required"],
+      maxLength: [256, "Category description cannot exceed 256 characters"],
     },
     parent: {
       type: Schema.Types.ObjectId,
       ref: "Category",
       default: null,
+      index: true,
     },
   },
   {
@@ -34,6 +36,4 @@ categorySchema.virtual("children", {
   foreignField: "parent",
 });
 
-const Category = model("Category", categorySchema);
-
-export default Category;
+export const Category = models.Category || model("Category", categorySchema);

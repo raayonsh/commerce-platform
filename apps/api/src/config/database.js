@@ -1,19 +1,16 @@
-import mongoose from "mongoose";
+import { connect, disconnect } from "mongoose";
 
-async function database() {
+export async function connectDB() {
   const mongodbUri = process.env.MONGODB_URI;
-
   if (!mongodbUri) {
-    throw new Error("MONGODB_URI is not defined");
+    throw new Error("MONGODB_URI is not defined in environment variables");
   }
 
-  try {
-    await mongoose.connect(mongodbUri);
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.error(err);
-    process.exit(1);
-  }
+  await connect(mongodbUri);
+  console.log("Connected to MongoDB");
 }
 
-export default database;
+export async function disconnectDB() {
+  await disconnect();
+  console.log("Disconnected from MongoDB");
+}
